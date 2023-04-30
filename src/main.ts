@@ -1,4 +1,11 @@
-const getMessage = (): String => {
+const slackBotToken = PropertiesService.getScriptProperties().getProperty('slack_bot_token')
+const channelId = PropertiesService.getScriptProperties().getProperty('slack_channel_id') || ''
+
+const remind = () => {
+    sendMessage(channelId, getMessage())
+}
+
+const getMessage = (): string => {
     const date = new Date()
     const today = Utilities.formatDate(date, 'Asia/Tokyo', 'YYYY/MM/dd')
     date.setDate(date.getDate() - 1)
@@ -15,4 +22,18 @@ const getMessage = (): String => {
             return `${date} ${firstMessage.getFrom()}: ${thread.getFirstMessageSubject()}`
         })
         .join('\n')
+}
+
+const sendMessage = (channelId: string, message: string) => {
+    const formData = {
+        token: slackBotToken,
+        channel: channelId,
+        text: message
+    }
+    const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
+        method: 'post',
+        payload: formData,
+        muteHttpExceptions: true
+    }
+    UrlFetchApp.fetch('https://slack.com/api/chat.postMessage', options)
 }
