@@ -18,8 +18,8 @@ const getMessage = (): string => {
         })
         .map(thread => {
             const firstMessage = thread.getMessages()[0]
-            const date = Utilities.formatDate(firstMessage.getDate(), 'Asia/Tokyo', 'YYYY/MM/dd')
-            return `${date} ${firstMessage.getFrom()}: ${thread.getFirstMessageSubject()}`
+            const datetime = Utilities.formatDate(firstMessage.getDate(), 'Asia/Tokyo', 'YYYY/MM/dd HH:mm:ss')
+            return `${datetime} ${firstMessage.getFrom()}: ${thread.getFirstMessageSubject()}`
         })
         .join('\n')
 }
